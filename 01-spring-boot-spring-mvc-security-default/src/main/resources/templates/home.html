@@ -19,16 +19,20 @@
 
     <hr>
 
-    <!-- Add feature for Manager -->
-    <p>
-        <a th:href="@{/leaders}">Leadership Meeting</a>
-        (Only for leaders)
-    </p>
+    <div sec:authorize="hasRole('MANAGER')">
+        <!-- Add feature for Manager -->
+        <p>
+            <a th:href="@{/leaders}">Leadership Meeting</a>
+            (Only for leaders)
+        </p>
+    </div>
 
-    <p>
-        <a th:href="@{/systems}">IT Systems Meeting</a>
-        (Only for Admin)
-    </p>
+    <div sec:authorize="hasRole('ADMIN')">
+        <p>
+            <a th:href="@{/systems}">IT Systems Meeting</a>
+            (Only for Admin)
+        </p>
+    </div>
 
     <hr>
 
