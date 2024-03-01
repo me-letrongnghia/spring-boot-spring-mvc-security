@@ -3,34 +3,20 @@ package com.nghiale.springboot.demosecurity.security;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
+import org.springframework.security.provisioning.JdbcUserDetailsManager;
+import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
+
+import javax.sql.DataSource;
 
 //B1: Add Configuration Annotation
 @Configuration
 public class DemoSecurityConfig {
 
+    // add support for JDBC ... no more hardcoded users
     @Bean
-    //B2: Create InMemoryUserDetailsManager to save user's password and role
-    public InMemoryUserDetailsManager userDetailsManager() {
-        UserDetails nghiale = User.builder()
-                .username("nghiale")
-                .password("{noop}test123")
-                .roles("ADMIN","MANAGER","EMPLOYEE")
-                .build();
-        UserDetails tole = User.builder()
-                .username("tole")
-                .password("{noop}test123")
-                .roles("MANAGER","EMPLOYEE")
-                .build();
-        UserDetails thinhtran = User.builder()
-                .username("thinhtran")
-                .password("{noop}test123")
-                .roles("EMPLOYEE")
-                .build();
-        return new InMemoryUserDetailsManager(nghiale, tole, thinhtran);
+    public UserDetailsManager userDetailsManager(DataSource dataSource) {
+        return new JdbcUserDetailsManager(dataSource);
     }
 
     //Custom Login Form
@@ -56,6 +42,29 @@ public class DemoSecurityConfig {
                 );
         return httpSecurity.build();
     }
+
+    /*
+    @Bean
+    //B2: Create InMemoryUserDetailsManager to save user's password and role
+    public InMemoryUserDetailsManager userDetailsManager() {
+        UserDetails nghiale = User.builder()
+                .username("nghiale")
+                .password("{noop}test123")
+                .roles("ADMIN","MANAGER","EMPLOYEE")
+                .build();
+        UserDetails tole = User.builder()
+                .username("tole")
+                .password("{noop}test123")
+                .roles("MANAGER","EMPLOYEE")
+                .build();
+        UserDetails thinhtran = User.builder()
+                .username("thinhtran")
+                .password("{noop}test123")
+                .roles("EMPLOYEE")
+                .build();
+        return new InMemoryUserDetailsManager(nghiale, tole, thinhtran);
+    }
+    */
 }
 
 
